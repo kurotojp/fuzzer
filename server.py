@@ -13,6 +13,9 @@ default_url :str = "http://127.0.0.1"
 
 
 
+def server():
+    httpd = http.server.HTTPServer(default_url, )
+
 
 if __name__ == '__main__':
     print("起動")
