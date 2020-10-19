@@ -12,3 +12,9 @@ Chrome拡張機能のXSSを検知するfuzzer
 1. 3,4を繰り返す
 
 
+# インストール
+```
+$ pip3 intsall requests
+$ git clone https://github.com/kurotojp/fuzzer.git
+```
+

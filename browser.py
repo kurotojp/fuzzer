@@ -6,7 +6,7 @@ import subprocess
 import sys
 import http.server
 import webbrowser
-import time
+import timeimport requests
 
 
 SERVER_PORT :int = 8000
@@ -23,11 +23,11 @@ def fuzzing(fuzz : str):
 
 
 def test():
-    while(!chrome.open(target_url)):
+    while():
         print("server.pyがうまく起動していません")
         time.sleep(5)
     
-    while(!chrome.open(fuzz_url)):
+    while():
         print("detect.pyがうまく起動していません")
         time.sleep(5)
 
