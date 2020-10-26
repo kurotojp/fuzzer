@@ -28,10 +28,10 @@ def test():
             io = pwn.remote('127.0.0.1', SERVER_PORT)
             io.send('GET /\r\n\r\n')
             req = io.recv()
-            print("[*]server.pyの起動を確認！")
+            #print("[*]server.pyの起動を確認！")
             break
         except:
-            print("[-]server.pyがうまく起動していません")
+            #print("[-]server.pyがうまく起動していません")
             time.sleep(5)
 
     while(True):
@@ -39,15 +39,15 @@ def test():
             io = pwn.remote('127.0.0.1', DETECT_PORT)
             io.send('GET /\r\n\r\n')
             req = io.recv()
-            print("[*]detect.pyの起動を確認！")
+            #print("[*]detect.pyの起動を確認！")
             break
         except:
-            print("[-]detect.pyがうまく起動していません")
+            #print("[-]detect.pyがうまく起動していません")
             time.sleep(5)
 
 
 if __name__ == '__main__':
     test()
-    fuzz :str = "location.href='" + fuzz_url + "';" 
+    fuzz :str = "location.href='" + fuzz_url + "?1';" 
     fuzzing(fuzz)
 

@@ -4,21 +4,19 @@ from typing import NoReturn
 import os
 import subprocess
 import sys
-import http.server
+import flask
 
 SERVER_PORT :int = 8000
 DETECT_PORT :int = 8001
+app = flask.Flask(__name__)
+TEST_NUM = 0;
 
-default_url :str = "http://127.0.0.1"
 
-def server():
-    server_address = ('', DETECT_PORT)
-    Handler = http.server.BaseHTTPRequestHandler
-    httpd = http.server.HTTPServer(server_address, Handler)
-    print('serving at port', str(DETECT_PORT))
-    httpd.serve_forever()
-    Handler.log_request()
+@app.route("/")
+def get():
+    print("XSS DETECT!")
+    return "XSS DETECT!"
 
 if __name__ == '__main__':
-    server()
+    app.run(debug=True, host="127.0.0.1", port=DETECT_PORT)
 
