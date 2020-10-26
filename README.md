@@ -13,8 +13,24 @@ Chrome拡張機能のXSSを検知するfuzzer
 
 
 # インストール
+* https://www.google.co.jp/chrome/canary/ よりChrome Canaryをダウンロード
 ```
-$ pip3 intsall pwntools
+$ sudo apt install ~/Downloads/google-chrome-stable_current_amd64.deb
+```
+* https://sites.google.com/a/chromium.org/chromedriver/downloads からChromeのversionにあったDriverを選択し、インストール
+* 以下のコマンドでversionは確認できる
+```
+$ /usr/bin/google-chrome --version
+```
+* chromedriverはPATHにある必要があるので、適当に移動させる必要がある
+* 
+
+```
+$ pip3 intsall pwntools==4.2.1
+$ pip3 install Flask==1.1.2
+$ pip3 install selenium==3.141.0
+$ pip3 install language-selector==0.1
+$ pip3 install six==1.15.0
 $ git clone https://github.com/kurotojp/fuzzer.git
 ```
 
