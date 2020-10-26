@@ -17,6 +17,6 @@ driver = selenium.webdriver.Chrome("/usr/bin/chromedriver", options=options)
 driver.get(target_url)
 driver.add_cookie({"name":"key", "value":"value"})
 
-fuzz = "location.href="
-
-driver.get(target_url + "#" + fuzz + fuzz_url)
+fuzz1 = "location.href="
+fuzz2 = ""
+driver.get(target_url + "#" + fuzz1 + fuzz_url + fuzz2)
