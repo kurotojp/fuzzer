@@ -38,10 +38,14 @@ def test():
             #print("[-]detect.pyがうまく起動していません")
             time.sleep(5)
 
-def urlFuzzing(fuzz1, fuzz2):
+def url_hash_href_Fuzzing(fuzz1, fuzz2):
     driver.get(target_url + "#" + fuzz1 + fuzz_url + fuzz2)
     print(driver.page_source)
     #driver.add_cookie({"name":"key", "value":"value"})
+
+
+def url_hash_alert_Fuzzing(fuzz):
+    driver.get(target_url + "#" + fuzz)
 
 
 if __name__ == '__main__':
@@ -49,4 +53,4 @@ if __name__ == '__main__':
 
     fuzz1 = "location.href='"
     fuzz2 = "';"
-    urlFuzzing(fuzz1, fuzz2)
+    url_hash_href_Fuzzing(fuzz1, fuzz2)

@@ -9,7 +9,7 @@ app = flask.Flask(__name__)
 
 @app.route("/")
 def get():
-    return "Test"
+    return "Normal Response"
 
 if __name__ == '__main__':
     app.run(debug=False, host="127.0.0.1", port=SERVER_PORT)

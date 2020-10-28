@@ -10,9 +10,15 @@ TEST_NUM = 0;
 
 @app.route("/")
 def get():
-    print("XSS DETECT!")
-    return "XSS DETECT!"
+    global TEST_NUM
+    if TEST_NUM==0:
+        TEST_NUM = 1
+        print("TEST")
+        return "TEST"
+    else:
+        print("XSS DETECT!")
+        return "XSS DETECT!"
 
 if __name__ == '__main__':
-    app.run(debug=True, host="127.0.0.1", port=DETECT_PORT)
+    app.run(debug=False, host="127.0.0.1", port=DETECT_PORT)
 

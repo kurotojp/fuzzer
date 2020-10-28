@@ -1,0 +1,3 @@
+[submodule "xss-payload-list"]
+	path = xss-payload-list
+	url = https://github.com/ismailtasdelen/xss-payload-list.git
