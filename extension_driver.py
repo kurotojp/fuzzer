@@ -38,16 +38,15 @@ def test():
             #print("[-]detect.pyがうまく起動していません")
             time.sleep(5)
 
-def fuzzing():
-    #driver.get(target_url)
+def urlFuzzing(fuzz1, fuzz2):
+    driver.get(target_url + "#" + fuzz1 + fuzz_url + fuzz2)
+    print(driver.page_source)
     #driver.add_cookie({"name":"key", "value":"value"})
-    fuzz1 = "location.href='" + fuzz_url  + "';"
-    #fuzz1 = "alert(document.cookie);"
-    fuzz2 = ""
-    #driver.get(target_url + "#" + fuzz1 + fuzz_url + fuzz2)
-    driver.get(target_url + "#" + fuzz1)
+
 
 if __name__ == '__main__':
-    #test()
-    fuzzing()
+    test()
 
+    fuzz1 = "location.href='"
+    fuzz2 = "';"
+    urlFuzzing(fuzz1, fuzz2)
