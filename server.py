@@ -1,9 +1,5 @@
 #!/usr/bin/python3
 
-from typing import NoReturn
-import os
-import subprocess
-import sys
 import flask
 
 SERVER_PORT :int = 8000
