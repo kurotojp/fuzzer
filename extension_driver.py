@@ -12,7 +12,7 @@ options = selenium.webdriver.ChromeOptions()
 options.add_argument('--disable-gpu')
 #options.add_argument("--headless")
 options.add_extension("~/extension/xss2/dist/chrome.crx")
-driver = selenium.webdriver.Chrome("/usr/bin/chromedriver", options=options)
+#driver = selenium.webdriver.Chrome("/usr/bin/chromedriver", options=options)
 
 
 def test():
@@ -39,14 +39,26 @@ def test():
             time.sleep(5)
 
 def url_hash_href_Fuzzing(fuzz):
+    driver = selenium.webdriver.Chrome("/usr/bin/chromedriver", options=options)
     driver.get(target_url + "#" + fuzz)
-    print(driver.page_source)
-    #driver.add_cookie({"name":"key", "value":"value"})
+    #detect(driver.page_source)
 
+
+def cookie_Fuzzing(fuzz):
+    driver = selenium.webdriver.Chrome("/usr/bin/chromedriver", options=options)
+    driver.get(target_url)
+    driver.add_cookie({"name":str(fuzz), "value":str(fuzz)})
 
 if __name__ == '__main__':
     test()
     f = open('fuzz.txt', 'r')
-    fuzz = f.readline().format(fuzz_url)
-
-    url_hash_href_Fuzzing(fuzz)
+    fuzz_num = 1
+    while True:
+        fuzz = f.readline().format(fuzz_url, str(fuzz_num))
+        if fuzz != "" and fuzz != "\n":
+            url_hash_href_Fuzzing(fuzz)
+            fuzz_num += 1
+            #print("fuzz = " + fuzz)
+        else:
+            break
+    f.close()
