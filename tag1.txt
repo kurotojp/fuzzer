@@ -4,5 +4,4 @@
 <body>
 <head>
 <strong>
-<img src="x" onerror="
-
+<img src="x" onerror=

@@ -1,0 +1,2 @@
+location.href='{0}?fuzz={1}';
+javascript:location.href='{0}?fuzz={1}'
