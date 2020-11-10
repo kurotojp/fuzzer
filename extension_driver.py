@@ -2,6 +2,7 @@ import selenium.webdriver
 import pwn
 import time
 import json
+import os
 
 SERVER_PORT :int = 8000
 DETECT_PORT :int = 8001
@@ -59,7 +60,7 @@ def post_Fuzzing(fuzz):
 if __name__ == '__main__':
     test()
 
-    json_file = open('/home/cysec/extension/xss2/dist/chrome/manifest.json', 'r')
+    json_file = open(os.environ['HOME'] + '/extension/xss2/dist/chrome/manifest.json', 'r')
     json_manifest = json.load(json_file)
     for element in json_manifest['permissions']:
         if "https" in element:

@@ -15,6 +15,8 @@ for element in json_manifest['permissions']:
     if "https" in element:
         https = True
 
+json_file.close()
+
 app = flask.Flask(__name__)
 
 @app.route("/")
