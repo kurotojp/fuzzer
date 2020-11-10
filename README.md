@@ -38,3 +38,8 @@ $ sudo apt install openssl
 HTTPSを使いたい場合はopensslで証明書を作る必要がある
 ```
 
+# fuzz生成
+* fuzzの生成にはcreate.pyを用いた
+* tag1.txtをfuzzの前に付ける
+* tag2.txtをfuzzの後ろに付ける
+
