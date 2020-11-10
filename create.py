@@ -18,4 +18,4 @@ def create_fuzz():
 
 if __name__ == '__main__':
     create_fuzz()
-
+    print("Create Fuzz finish!")
