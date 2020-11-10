@@ -4,6 +4,8 @@ import flask
 
 SERVER_PORT :int = 8000
 DETECT_PORT :int = 8001
+default_url :str = "http://127.0.0.1"
+
 app = flask.Flask(__name__)
 TEST_NUM = 0;
 f = open('vuln.txt', 'w')

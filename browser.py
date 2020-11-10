@@ -1,10 +1,5 @@
 #!/usr/bin/python3
 
-from typing import NoReturn
-import os
-import subprocess
-import sys
-import http.server
 import webbrowser
 import time
 import pwn
