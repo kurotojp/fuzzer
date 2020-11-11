@@ -56,12 +56,14 @@ def cookie_Fuzzing(fuzz):
     driver = selenium.webdriver.Chrome("/usr/bin/chromedriver", options=options)
     driver.get(target_url)
     driver.add_cookie({"name":str(fuzz), "value":str(fuzz)})
+    driver.close()
 
 def post_Fuzzing(fuzz):
     driver = selenium.webdriver.Chrome("/usr/bin/chromedriver", options=options)
 
 
 if __name__ == '__main__':
+    start_time = time.time()
     test()
 
     '''
@@ -106,3 +108,5 @@ if __name__ == '__main__':
         else:
             break
     f.close()
+    stop_time = time.time() - start_time
+    print("Fuzzing Finish!\nCheck vuln.txt!\nTime:{0}".format(stop_time) + "[sec]")
