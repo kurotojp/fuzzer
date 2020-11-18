@@ -51,6 +51,10 @@ def url_hash_Fuzzing(fuzz):
     #detect(driver.page_source)
     driver.close()
 
+def get_Fuzzing(fuzz):
+    driver = selenium.webdriver.Chrome("/usr/bin/chromedriver", options=options)
+    driver.get(target_url + "?a=" + fuzz)
+    driver.close()
 
 def cookie_Fuzzing(fuzz):
     driver = selenium.webdriver.Chrome("/usr/bin/chromedriver", options=options)
@@ -102,11 +106,33 @@ if __name__ == '__main__':
         fuzz = f.readline().format(fuzz_url, str(fuzz_num))
         if fuzz != "" and fuzz != "\n":
             url_hash_Fuzzing(fuzz)
+            fuzz_num += 1
+            get_Fuzzing(fuzz)
             #cookie_Fuzzing(fuzz)
             fuzz_num += 1
             #print("fuzz = " + fuzz)
         else:
             break
     f.close()
+    
+    '''
+    f = open('fuzz.txt', 'r')
+    fuzz_num = 1
+    while True:
+        fuzz = f.readline().format(fuzz_url, str(fuzz_num))
+        if fuzz != "" and fuzz != "\n":
+            #url_hash_Fuzzing(fuzz)
+            #cookie_Fuzzing(fuzz)
+            fuzz_num += 1
+            #print("fuzz = " + fuzz)
+        else:
+            break
+    f.close()
+    '''
+
+
+
+
+
     stop_time = time.time() - start_time
     print("Fuzzing Finish!\nCheck vuln.txt!\nTime:{0}".format(stop_time) + "[sec]")
