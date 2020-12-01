@@ -48,7 +48,6 @@ def test():
 def url_hash_Fuzzing(fuzz):
     driver = selenium.webdriver.Chrome("/usr/bin/chromedriver", options=options)
     driver.get(target_url + "#" + fuzz)
-    #detect(driver.page_source)
     driver.close()
 
 def get_Fuzzing(fuzz):
@@ -65,6 +64,10 @@ def cookie_Fuzzing(fuzz):
 def post_Fuzzing(fuzz):
     driver = selenium.webdriver.Chrome("/usr/bin/chromedriver", options=options)
 
+def nomal_response_Fuzzing(fuzz): 
+    driver = selenium.webdriver.Chrome("/usr/bin/chromedriver", options=options)
+    driver.get(target_url + "/fuzz?fuzz=" + fuzz)
+    driver.close()
 
 if __name__ == '__main__':
     start_time = time.time()
@@ -108,30 +111,12 @@ if __name__ == '__main__':
             url_hash_Fuzzing(fuzz)
             fuzz_num += 1
             get_Fuzzing(fuzz)
-            #cookie_Fuzzing(fuzz)
             fuzz_num += 1
-            #print("fuzz = " + fuzz)
+            nomal_response_Fuzzing(fuzz)
+            fuzz_num += 1
         else:
             break
     f.close()
-    
-    '''
-    f = open('fuzz.txt', 'r')
-    fuzz_num = 1
-    while True:
-        fuzz = f.readline().format(fuzz_url, str(fuzz_num))
-        if fuzz != "" and fuzz != "\n":
-            #url_hash_Fuzzing(fuzz)
-            #cookie_Fuzzing(fuzz)
-            fuzz_num += 1
-            #print("fuzz = " + fuzz)
-        else:
-            break
-    f.close()
-    '''
-
-
-
 
 
     stop_time = time.time() - start_time

@@ -31,6 +31,12 @@ def get():
 def favicon():
     return ""
 
+@app.route("/fuzz", methods=['GET'])
+def fuzzing():
+    fuzz = flask.request.args.get('fuzz')
+    return fuzz
+
+
 if __name__ == '__main__':
     http_or_https()
     if https is False:
