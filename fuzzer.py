@@ -1,8 +1,12 @@
+import selenium.common.exceptions
 import selenium.webdriver
 import pwn
 import time
 import json
 import os
+import argparse
+
+print(dir(selenium.common.exceptions))
 
 SERVER_PORT :int = 8000
 DETECT_PORT :int = 8001
@@ -19,7 +23,8 @@ options = selenium.webdriver.ChromeOptions()
 options.add_argument('--disable-gpu')
 #options.add_argument("--headless")
 options.add_extension("~/extension/xss2/dist/chrome.crx")
-#driver = selenium.webdriver.Chrome("/usr/bin/chromedriver", options=options)
+driver = selenium.webdriver.Chrome("/usr/bin/chromedriver", options=options)
+driver.set_page_load_timeout(3)
 
 
 def test():
@@ -46,30 +51,61 @@ def test():
             time.sleep(5)
 
 def url_hash_Fuzzing(fuzz):
-    driver = selenium.webdriver.Chrome("/usr/bin/chromedriver", options=options)
-    driver.get(target_url + "#" + fuzz)
-    driver.close()
+    global driver
+    #driver = selenium.webdriver.Chrome("/usr/bin/chromedriver", options=options)
+    try:
+        driver.get(target_url + "#" + fuzz)
+    except:
+        #print("WTF")
+        #driver = selenium.webdriver.Chrome("/usr/bin/chromedriver", options=options)
+        driver.get(target_url + "#" + fuzz)
+        #driver.close()
 
 def get_Fuzzing(fuzz):
-    driver = selenium.webdriver.Chrome("/usr/bin/chromedriver", options=options)
-    driver.get(target_url + "?a=" + fuzz)
-    driver.close()
+    global driver
+    #driver = selenium.webdriver.Chrome("/usr/bin/chromedriver", options=options)
+    try:
+        driver.get(target_url + "?a=" + fuzz)
+    except:
+        #print("WTF")
+        driver = selenium.webdriver.Chrome("/usr/bin/chromedriver", options=options)
+        driver.get(target_url + "?a=" + fuzz)
+        driver.close()
+    #driver.close()
 
 def cookie_Fuzzing(fuzz):
-    driver = selenium.webdriver.Chrome("/usr/bin/chromedriver", options=options)
+    #driver = selenium.webdriver.Chrome("/usr/bin/chromedriver", options=options)
     driver.get(target_url)
     driver.add_cookie({"name":str(fuzz), "value":str(fuzz)})
-    driver.close()
+    #driver.close()
 
 def post_Fuzzing(fuzz):
-    driver = selenium.webdriver.Chrome("/usr/bin/chromedriver", options=options)
+    #driver = selenium.webdriver.Chrome("/usr/bin/chromedriver", options=options)
+    print("A")
 
-def nomal_response_Fuzzing(fuzz): 
-    driver = selenium.webdriver.Chrome("/usr/bin/chromedriver", options=options)
+def nomal_response_Fuzzing(fuzz):
+    #driver = selenium.webdriver.Chrome("/usr/bin/chromedriver", options=options)
     driver.get(target_url + "/fuzz?fuzz=" + fuzz)
-    driver.close()
+    #driver.close()
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('mode', help="Fuzzing or Check")
+
+    args = parser.parse_args()
+    if args.mode is None:
+        print("[-] No mode selected")
+        exit(1)
+    elif args.mode == "Fuzzing":
+        mode = "Fuzzing"
+        print("[+] Fuzzing mode!")
+    elif args.mode == "Check":
+        mode = "Check"
+        print("[+] Check mode!")
+    else:
+        print("[-] mode is Fuzzing or Check please")
+        exit(1)
+
     start_time = time.time()
     test()
 
@@ -99,7 +135,7 @@ if __name__ == '__main__':
             target_url = target_https_domain + str(SERVER_PORT)
         else:
            print("What!?") 
-    
+
     json_file.close()
     '''
 
@@ -108,8 +144,8 @@ if __name__ == '__main__':
     while True:
         fuzz = f.readline().format(fuzz_url, str(fuzz_num))
         if fuzz != "" and fuzz != "\n":
-            #url_hash_Fuzzing(fuzz)
-            #fuzz_num += 1
+            url_hash_Fuzzing(fuzz)
+            fuzz_num += 1
             get_Fuzzing(fuzz)
             fuzz_num += 1
             #nomal_response_Fuzzing(fuzz)
@@ -117,7 +153,6 @@ if __name__ == '__main__':
         else:
             break
     f.close()
-
 
     stop_time = time.time() - start_time
     print("Fuzzing Finish!\nCheck vuln.txt!\nTime:{0}".format(stop_time) + "[sec]")

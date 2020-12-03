@@ -36,6 +36,9 @@ def fuzzing():
     fuzz = flask.request.args.get('fuzz')
     return fuzz
 
+@app.route("/end")
+def end():
+    exit()
 
 if __name__ == '__main__':
     http_or_https()

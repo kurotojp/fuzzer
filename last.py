@@ -1,8 +1,10 @@
+import selenium.common.exceptions
 import selenium.webdriver
 import pwn
 import time
 import json
 import os
+import argparse
 
 SERVER_PORT :int = 8000
 DETECT_PORT :int = 8001
@@ -19,7 +21,8 @@ options = selenium.webdriver.ChromeOptions()
 options.add_argument('--disable-gpu')
 #options.add_argument("--headless")
 options.add_extension("~/extension/xss2/dist/chrome.crx")
-#driver = selenium.webdriver.Chrome("/usr/bin/chromedriver", options=options)
+driver = selenium.webdriver.Chrome("/usr/bin/chromedriver", options=options)
+driver.set_page_load_timeout(3)
 
 
 def test():
@@ -27,47 +30,46 @@ def test():
         try:
             io = pwn.remote('127.0.0.1', SERVER_PORT)
             io.send('GET /\r\n\r\n')
-            #req = io.recv()
-            #print("[*]server.pyの起動を確認！")
             break
         except:
-            #print("[-]server.pyがうまく起動していません")
             time.sleep(5)
 
     while(True):
         try:
             io = pwn.remote('127.0.0.1', DETECT_PORT)
             io.send('GET /\r\n\r\n')
-            #req = io.recv()
-            #print("[*]detect.pyの起動を確認！")
             break
         except:
-            #print("[-]detect.pyがうまく起動していません")
             time.sleep(5)
 
 def url_hash_Fuzzing(fuzz):
-    driver = selenium.webdriver.Chrome("/usr/bin/chromedriver", options=options)
-    driver.get(target_url + "#" + fuzz)
-    driver.close()
+    global driver
+    try:
+        driver.get(target_url + "#" + fuzz)
+    except:
+        driver.get(target_url + "#" + fuzz)
 
 def get_Fuzzing(fuzz):
-    driver = selenium.webdriver.Chrome("/usr/bin/chromedriver", options=options)
-    driver.get(target_url + "?a=" + fuzz)
-    driver.close()
+    global driver
+    try:
+        driver.get(target_url + "?a=" + fuzz)
+    except:
+        driver.get(target_url + "?a=" + fuzz)
 
 def cookie_Fuzzing(fuzz):
-    driver = selenium.webdriver.Chrome("/usr/bin/chromedriver", options=options)
-    driver.get(target_url)
-    driver.add_cookie({"name":str(fuzz), "value":str(fuzz)})
-    driver.close()
+    global driver
+    try:
+        driver.add_cookie({"name":str(fuzz), "value":str(fuzz)})
+        driver.get(target_url)
+    except:
+        driver.add_cookie({"name":str(fuzz), "value":str(fuzz)})
+        driver.get(target_url)
 
-def post_Fuzzing(fuzz):
-    driver = selenium.webdriver.Chrome("/usr/bin/chromedriver", options=options)
-
-def nomal_response_Fuzzing(fuzz): 
-    driver = selenium.webdriver.Chrome("/usr/bin/chromedriver", options=options)
-    driver.get(target_url + "/fuzz?fuzz=" + fuzz)
-    driver.close()
+def nomal_response_Fuzzing(fuzz):
+    try:
+        driver.get(target_url + "/fuzz?fuzz=" + fuzz)
+    except:
+        driver.get(target_url + "/fuzz?fuzz=" + fuzz)
 
 if __name__ == '__main__':
     start_time = time.time()
@@ -99,7 +101,7 @@ if __name__ == '__main__':
             target_url = target_https_domain + str(SERVER_PORT)
         else:
            print("What!?") 
-    
+
     json_file.close()
     '''
 
@@ -108,16 +110,16 @@ if __name__ == '__main__':
     while True:
         fuzz = f.readline().format(fuzz_url, str(fuzz_num))
         if fuzz != "" and fuzz != "\n":
-            #url_hash_Fuzzing(fuzz)
-            #fuzz_num += 1
+            url_hash_Fuzzing(fuzz)
+            fuzz_num += 1
             get_Fuzzing(fuzz)
             fuzz_num += 1
-            #nomal_response_Fuzzing(fuzz)
-            #fuzz_num += 1
         else:
             break
     f.close()
 
-
     stop_time = time.time() - start_time
     print("Fuzzing Finish!\nCheck vuln.txt!\nTime:{0}".format(stop_time) + "[sec]")
+    driver.get(target_url + "/end")
+    driver.get(fuzz_url + "/end")
+    driver.close()

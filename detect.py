@@ -17,13 +17,25 @@ def get():
         TEST_NUM = 1
         return "TEST"
     else:
-        fuzz = flask.request.args.get("fuzz")
-        f.writelines(fuzz + "\n")
-        return "fuzznum = " + fuzz
+        try:
+            fuzz = flask.request.args.get("fuzz")
+            if fuzz % 2 == 0:
+                f.writelines("#Fuzzing Fuzznum=" + fuzz/2 + 1)
+            else:
+                f.writelines("/?a=Fuzzing Fuzznum=" + fuzz/2)
+
+            return "fuzznum = " + fuzz
+        except:
+            return "What!?"
+
 
 @app.route("/favicon.ico")
 def favicon():
     return ""
+
+@app.route("/end")
+def end():
+    exit()
 
 if __name__ == '__main__':
     app.run(debug=False, host="127.0.0.1", port=DETECT_PORT)
