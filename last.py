@@ -21,6 +21,7 @@ options = selenium.webdriver.ChromeOptions()
 options.add_argument('--disable-gpu')
 #options.add_argument("--headless")
 options.add_extension("~/extension/xss2/dist/chrome.crx")
+#options.add_extension("/home/cysec/Downloads/5000-trillion-yen-converter/app.crx")
 driver = selenium.webdriver.Chrome("/usr/bin/chromedriver", options=options)
 driver.set_page_load_timeout(3)
 
@@ -71,9 +72,35 @@ def nomal_response_Fuzzing(fuzz):
     except:
         driver.get(target_url + "/fuzz?fuzz=" + fuzz)
 
+
+def end():
+    global driver
+    try:
+        driver.get(target_url + "/end")
+        driver.get(fuzz_url + "/end")
+    except:
+        driver.get(target_url + "/end")
+        driver.get(fuzz_url + "/end")
+
+
 if __name__ == '__main__':
-    start_time = time.time()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('extension', help="Where extension")
+
+    args = parser.parse_args()
+    if args.extension is None:
+        print("[-] No extension selected")
+        driver.close()
+
+    if os.path.exists(args.extension):
+        print("OK")
+    else:
+        print("[-] No extension! Path miss?")
+        driver.close()
+        exit(-1)
+
     test()
+    start_time = time.time()
 
     '''
     json_file = open(os.environ['HOME'] + '/extension/xss2/dist/chrome/manifest.json', 'r')
@@ -119,7 +146,6 @@ if __name__ == '__main__':
     f.close()
 
     stop_time = time.time() - start_time
+    end()
     print("Fuzzing Finish!\nCheck vuln.txt!\nTime:{0}".format(stop_time) + "[sec]")
-    driver.get(target_url + "/end")
-    driver.get(fuzz_url + "/end")
     driver.close()

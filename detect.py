@@ -1,6 +1,8 @@
 #!/usr/bin/python3
 
 import flask
+import os
+import sys
 
 SERVER_PORT :int = 8000
 DETECT_PORT :int = 8001
@@ -35,7 +37,8 @@ def favicon():
 
 @app.route("/end")
 def end():
-    exit()
+    sys.exit()
+    return "End"
 
 if __name__ == '__main__':
     app.run(debug=False, host="127.0.0.1", port=DETECT_PORT)

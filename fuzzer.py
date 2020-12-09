@@ -23,8 +23,9 @@ options = selenium.webdriver.ChromeOptions()
 options.add_argument('--disable-gpu')
 #options.add_argument("--headless")
 options.add_extension("~/extension/xss2/dist/chrome.crx")
+#options.add_extension("/home/cysec/Downloads/5000-trillion-yen-converter/app.crx")
 driver = selenium.webdriver.Chrome("/usr/bin/chromedriver", options=options)
-driver.set_page_load_timeout(3)
+driver.set_page_load_timeout(30)
 
 
 def test():
@@ -89,6 +90,7 @@ def nomal_response_Fuzzing(fuzz):
     #driver.close()
 
 if __name__ == '__main__':
+    '''
     parser = argparse.ArgumentParser()
     parser.add_argument('mode', help="Fuzzing or Check")
 
@@ -105,7 +107,7 @@ if __name__ == '__main__':
     else:
         print("[-] mode is Fuzzing or Check please")
         exit(1)
-
+    '''
     start_time = time.time()
     test()
 

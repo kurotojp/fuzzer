@@ -7,13 +7,13 @@ Chrome拡張機能のXSSを検知するfuzzer
 # 説明
 1. server.pyはpythonのhttp.serverでサーバを立ち上げる
 1. detect.pyは1とは別ポートでサーバを立ち上げる
-1. extension_driver.pyでchromeを立ち上げ、1のサーバにアクセスする(このときにURLにfuzzデータをつける)
+1. last.pyでseleniumによりchromeを立ち上げ、1のサーバにアクセスする(このときにURLにfuzzデータをつける)
 1. fuzzデータは1にリクエストを送るようになっているので, detect.pyにリクエストが飛ぶとそのfuzzデータによってXSS脆弱性を検知したとする
-1. 3,4を繰り返す(server.pyのレスポンスにfuzzを入れるものもある)
+1. 3,4を繰り返す
 
 
 # インストール
-* Chromeをダウンロード
+* Chromeをダウンロード(~/Downloads/google-chrome-stable_current_amd64.debにあるとすると)
 ```
 $ sudo apt install ~/Downloads/google-chrome-stable_current_amd64.deb
 ```

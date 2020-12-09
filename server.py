@@ -3,6 +3,7 @@
 import os
 import json
 import flask
+import sys
 
 SERVER_PORT :int = 8000
 DETECT_PORT :int = 8001
@@ -38,7 +39,8 @@ def fuzzing():
 
 @app.route("/end")
 def end():
-    exit()
+    sys.exit()
+    return "End"
 
 if __name__ == '__main__':
     http_or_https()
