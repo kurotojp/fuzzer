@@ -91,13 +91,14 @@ if __name__ == '__main__':
     if args.extension is None:
         print("[-] No extension selected")
         driver.close()
+        exit(1)
 
     if os.path.exists(args.extension):
         print("OK")
     else:
         print("[-] No extension! Path miss?")
         driver.close()
-        exit(-1)
+        exit(1)
 
     test()
     start_time = time.time()
