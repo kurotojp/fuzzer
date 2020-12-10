@@ -20,7 +20,7 @@ target_https_domain = "https://127.0.0.1"
 options = selenium.webdriver.ChromeOptions()
 options.add_argument('--disable-gpu')
 #options.add_argument("--headless")
-options.add_extension("~/extension/xss2/dist/chrome.crx")
+#options.add_extension("~/extension/xss2/dist/chrome.crx")
 #options.add_extension("/home/cysec/Downloads/5000-trillion-yen-converter/app.crx")
 driver = selenium.webdriver.Chrome("/usr/bin/chromedriver", options=options)
 driver.set_page_load_timeout(3)
@@ -100,6 +100,7 @@ if __name__ == '__main__':
         driver.close()
         exit(1)
 
+    options.add_extension(args.extension)
     test()
     start_time = time.time()
 
