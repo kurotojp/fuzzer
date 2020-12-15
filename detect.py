@@ -21,10 +21,11 @@ def get():
     else:
         try:
             fuzz = flask.request.args.get("fuzz")
-            if fuzz % 2 == 0:
-                f.writelines("#Fuzzing Fuzznum=" + fuzz/2 + 1)
+            #f.writelines(fuzz)
+            if int(fuzz) % 2 == 1:
+                f.writelines("#Fuzzing Fuzznum=" + str(int(fuzz)//2 + 1) + "\n")
             else:
-                f.writelines("/?a=Fuzzing Fuzznum=" + fuzz/2)
+                f.writelines("/?a=Fuzzing Fuzznum=" + str(int(fuzz)//2) + "\n")
 
             return "fuzznum = " + fuzz
         except:
@@ -37,9 +38,13 @@ def favicon():
 
 @app.route("/end")
 def end():
+    global f
+    f.close()
     sys.exit()
     return "End"
 
 if __name__ == '__main__':
-    app.run(debug=False, host="127.0.0.1", port=DETECT_PORT)
-
+    try:
+        app.run(debug=False, host="127.0.0.1", port=DETECT_PORT)
+    except:
+        f.close()
