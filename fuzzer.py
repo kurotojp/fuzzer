@@ -2,10 +2,8 @@ import selenium.common.exceptions
 import selenium.webdriver
 import pwn
 import time
-import json
 import os
 import argparse
-import subprocess
 
 
 SERVER_PORT :int = 8000
@@ -22,12 +20,15 @@ target_https_domain = "https://127.0.0.1"
 options = selenium.webdriver.ChromeOptions()
 options.add_argument('--disable-gpu')
 #options.add_argument("--headless")
-options.add_extension("~/extension/xss2/dist/chrome.crx")
+#options.add_extension("~/extension/xss2/dist/chrome.crx")
 #options.add_extension("/home/cysec/Downloads/5000-trillion-yen-converter/app.crx")
-driver = selenium.webdriver.Chrome("/usr/bin/chromedriver", options=options)
-driver.set_page_load_timeout(3)
+driver = None
+#driver = selenium.webdriver.Chrome("/usr/bin/chromedriver", options=options)
+#driver.set_page_load_timeout(3)
+#driver.close()
 
 def test():
+    global driver
     while(True):
         try:
             io = pwn.remote('127.0.0.1', SERVER_PORT)
@@ -43,6 +44,9 @@ def test():
             break
         except:
             time.sleep(5)
+    driver = selenium.webdriver.Chrome("/usr/bin/chromedriver", options=options)
+    driver.set_page_load_timeout(3)
+
 
 def url_hash_Fuzzing(fuzz):
     global driver
