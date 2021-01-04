@@ -4,6 +4,8 @@ import pwn
 import time
 import os
 import argparse
+from pynput import mouse
+import pyautogui
 
 
 SERVER_PORT :int = 8000
@@ -15,7 +17,11 @@ https = False
 http = False
 target_http_domain = "http://127.0.0.1"
 target_https_domain = "https://127.0.0.1"
-
+click_num = 0
+fuzzing_number = 0
+click_position = []
+click_x = None
+click_y = None
 
 options = selenium.webdriver.ChromeOptions()
 options.add_argument('--disable-gpu')
@@ -27,8 +33,28 @@ driver = None
 #driver.set_page_load_timeout(3)
 #driver.close()
 
+def add_click_position():
+    global click_position
+    global click_x
+    global click_y
+    click_position.append((click_x, click_y))
+
+
+def on_click(x, y, button, pressed):
+    global click_x
+    global click_y
+    print('{0} at {1}'.format(
+        'Pressed' if pressed else 'Released',
+        (x, y)))
+    click_x = x
+    click_y = y
+    if not pressed:
+        # Stop listener
+        return False
+
 def test():
     global driver
+    global target_url
     while(True):
         try:
             io = pwn.remote('127.0.0.1', SERVER_PORT)
@@ -46,7 +72,7 @@ def test():
             time.sleep(5)
     driver = selenium.webdriver.Chrome("/usr/bin/chromedriver", options=options)
     driver.set_page_load_timeout(3)
-
+    driver.get(target_url)
 
 def url_hash_Fuzzing(fuzz):
     global driver
@@ -92,6 +118,21 @@ def end_close():
     global driver
     driver.close()
 
+def extension_Fuzzing(fuzz):
+    try:
+        driver.get(target_url)
+    except:
+        driver.get(target_url)
+
+    for num in range(click_num):
+        pos_x = click_position[num][0]
+        pos_y = click_position[num][1]
+        pyautogui.click(x=pos_x, y=pos_y)
+        if num == fuzzing_number:
+            pyautogui.typewrite(fuzz)
+            pyautogui.press("enter")
+        time.sleep(0.1)
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser("python3 fuzzer.py extension")
     parser.add_argument('extension', help="Where extension")
@@ -110,6 +151,22 @@ if __name__ == '__main__':
 
     options.add_extension(args.extension)
     test()
+    click_num = int(input("click_num = "))
+    fuzzing_number = int(input("fuzzing_num = "))
+
+    if fuzzing_number > click_num:
+        print("[-] fuzzing_num > click_num")
+        exit(1)
+
+    for num in range(click_num):
+        with mouse.Listener(
+                on_click=on_click
+                ) as listener:
+            listener.join()
+        add_click_position()
+    if click_num > 0:
+        print(click_position)
+
     start_time = time.time()
 
     '''
@@ -141,7 +198,6 @@ if __name__ == '__main__':
 
     json_file.close()
     '''
-
     f = open('fuzz.txt', 'r')
     fuzz_num = 1
     while True:
@@ -150,6 +206,8 @@ if __name__ == '__main__':
             url_hash_Fuzzing(fuzz)
             fuzz_num += 1
             get_Fuzzing(fuzz)
+            fuzz_num += 1
+            extension_Fuzzing(fuzz)
             fuzz_num += 1
         else:
             break

@@ -22,8 +22,10 @@ def get():
         try:
             fuzz = flask.request.args.get("fuzz")
             #f.writelines(fuzz)
-            if int(fuzz) % 2 == 1:
-                f.writelines("#Fuzzing Fuzznum=" + str(int(fuzz)//2 + 1) + "\n")
+            if int(fuzz) % 3 == 1:
+                f.writelines("#Fuzzing Fuzznum=" + str(int(fuzz)//3 + 1) + "\n")
+            elif int(fuzz) % 3 == 2:
+                f.writelines("TEXT_Fuzzing Fuzznum=" + str(int(fuzz)//3) + "\n")
             else:
                 f.writelines("/?a=Fuzzing Fuzznum=" + str(int(fuzz)//2) + "\n")
 
