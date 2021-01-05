@@ -6,7 +6,7 @@ import os
 import argparse
 from pynput import mouse
 import pyautogui
-
+import json
 
 SERVER_PORT :int = 8000
 DETECT_PORT :int = 8001
@@ -22,6 +22,7 @@ fuzzing_number = 0
 click_position = []
 click_x = None
 click_y = None
+click_button = None
 
 options = selenium.webdriver.ChromeOptions()
 options.add_argument('--disable-gpu')
@@ -37,17 +38,20 @@ def add_click_position():
     global click_position
     global click_x
     global click_y
-    click_position.append((click_x, click_y))
+    global click_button
+    click_position.append((click_x, click_y, click_button))
 
 
 def on_click(x, y, button, pressed):
     global click_x
     global click_y
+    global click_button 
     print('{0} at {1}'.format(
         'Pressed' if pressed else 'Released',
         (x, y)))
     click_x = x
     click_y = y
+    click_button = button
     if not pressed:
         # Stop listener
         return False
@@ -120,18 +124,24 @@ def end_close():
 
 def extension_Fuzzing(fuzz):
     try:
-        driver.get(target_url)
+        driver.get(target_url + "#" + fuzz)
     except:
-        driver.get(target_url)
+        driver.get(target_url + "#" + fuzz)
 
     for num in range(click_num):
         pos_x = click_position[num][0]
         pos_y = click_position[num][1]
-        pyautogui.click(x=pos_x, y=pos_y)
-        if num == fuzzing_number:
+        pos_button = click_position[num][2]
+        if "right" in str(pos_button):
+            pyautogui.click(x=pos_x, y=pos_y, button="right")
+        else:
+            pyautogui.click(x=pos_x, y=pos_y, button="left")
+
+        if num == fuzzing_number - 1:
             pyautogui.typewrite(fuzz)
             pyautogui.press("enter")
-        time.sleep(0.1)
+
+        time.sleep(0.5)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser("python3 fuzzer.py extension")
@@ -158,18 +168,18 @@ if __name__ == '__main__':
         print("[-] fuzzing_num > click_num")
         exit(1)
 
-    for num in range(click_num):
-        with mouse.Listener(
-                on_click=on_click
-                ) as listener:
-            listener.join()
-        add_click_position()
     if click_num > 0:
-        print(click_position)
+        for num in range(click_num):
+            with mouse.Listener(
+                    on_click=on_click
+                    ) as listener:
+                listener.join()
+            add_click_position()
+        if click_num > 0:
+            print(click_position)
 
     start_time = time.time()
 
-    '''
     json_file = open(os.environ['HOME'] + '/extension/xss2/dist/chrome/manifest.json', 'r')
     json_manifest = json.load(json_file)
     for element in json_manifest['permissions']:
@@ -197,7 +207,7 @@ if __name__ == '__main__':
            print("What!?") 
 
     json_file.close()
-    '''
+
     f = open('fuzz.txt', 'r')
     fuzz_num = 1
     while True:
@@ -207,7 +217,9 @@ if __name__ == '__main__':
             fuzz_num += 1
             get_Fuzzing(fuzz)
             fuzz_num += 1
-            extension_Fuzzing(fuzz)
+            if click_num > 0:
+                extension_Fuzzing(fuzz)
+
             fuzz_num += 1
         else:
             break
