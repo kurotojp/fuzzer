@@ -79,6 +79,8 @@ def test():
     driver.get(target_url)
 
 def url_hash_Fuzzing(fuzz):
+    global target_url
+    print(target_url)
     global driver
     try:
         driver.get(target_url + "#" + fuzz)
@@ -86,6 +88,7 @@ def url_hash_Fuzzing(fuzz):
         driver.get(target_url + "#" + fuzz)
 
 def get_Fuzzing(fuzz):
+    global target_url
     global driver
     try:
         driver.get(target_url + "?a=" + fuzz)
@@ -94,6 +97,7 @@ def get_Fuzzing(fuzz):
 
 def cookie_Fuzzing(fuzz):
     global driver
+    global target_url
     try:
         driver.add_cookie({"name":str(fuzz), "value":str(fuzz)})
         driver.get(target_url)
@@ -179,8 +183,9 @@ if __name__ == '__main__':
             print(click_position)
 
     start_time = time.time()
+    manifest = args.extension.split(".crx")[0] + "/manifest.json" 
 
-    json_file = open(os.environ['HOME'] + '/extension/xss2/dist/chrome/manifest.json', 'r')
+    json_file = open(manifest, 'r')
     json_manifest = json.load(json_file)
     for element in json_manifest['permissions']:
         if "https" in element:
@@ -197,12 +202,13 @@ if __name__ == '__main__':
             elif "http://" in element:
                 target_http_domain = element
                 
+
     if http is True:
-        target_url = target_http_domain + str(SERVER_PORT)
+        target_url = target_http_domain + ":" + str(SERVER_PORT)
         print(target_http_domain)
     else:
         if https is True:
-            target_url = target_https_domain + str(SERVER_PORT)
+            target_url = target_https_domain + ":" + str(SERVER_PORT)
         else:
            print("What!?") 
 
