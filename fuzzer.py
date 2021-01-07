@@ -183,7 +183,12 @@ if __name__ == '__main__':
             print(click_position)
 
     start_time = time.time()
-    manifest = args.extension.split(".crx")[0] + "/manifest.json" 
+    manifest = args.extension.split(".crx")[0] + "/manifest.json"
+
+    if os.path.exists(manifest) is False:
+        print("[-] manifestfile is not found!")
+        end_close()
+        exit(1)
 
     json_file = open(manifest, 'r')
     json_manifest = json.load(json_file)
@@ -194,6 +199,8 @@ if __name__ == '__main__':
                 print("https all domain")
             elif "https://" in element:
                 target_https_domain = element
+            elif "://" in element:
+                print("all scheme")
                 
         elif "http" in element:
             http = True
@@ -210,7 +217,7 @@ if __name__ == '__main__':
         if https is True:
             target_url = target_https_domain + ":" + str(SERVER_PORT)
         else:
-           print("What!?") 
+            print("127.0.0.1で行います")
 
     json_file.close()
 
