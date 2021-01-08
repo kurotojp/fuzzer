@@ -34,6 +34,7 @@ $ pip3 install selenium==3.141.0
 $ pip3 install language-selector==0.1
 $ pip3 install six==1.15.0
 $ pip3 install pynput==1.7.2
+$ pip3 install pyautogui
 $ git clone https://github.com/kurotojp/fuzzer.git
 $ sudo apt install openssl python3-tk python3-dev
 HTTPSを使いたい場合はopensslで証明書を作る必要がある

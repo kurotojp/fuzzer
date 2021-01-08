@@ -80,7 +80,7 @@ def test():
 
 def url_hash_Fuzzing(fuzz):
     global target_url
-    print(target_url)
+    #print(target_url)
     global driver
     try:
         driver.get(target_url + "#" + fuzz)
