@@ -14,12 +14,16 @@ def http_or_https(manifest):
     json_file = open(manifest, 'r')
     
     json_manifest = json.load(json_file)
-    for element in json_manifest['permissions']:
-        if "https" in element:
-            if "http:" in element:
-                https = False
-            else:
-                https = True
+    try:
+        for element in json_manifest['permissions']:
+            if "https" in element:
+                if "http:" in element:
+                    https = False
+                else:
+                    https = True
+    except:
+        print("permissions is none")
+
 
     json_file.close()
 
