@@ -10,6 +10,10 @@ SERVER_PORT :int = 8000
 DETECT_PORT :int = 8001
 default_url :str = "http://127.0.0.1"
 https = False
+
+f = open('escape.txt', 'w')
+write_num = 0
+
 def http_or_https(manifest):
     json_file = open(manifest, 'r')
     
@@ -47,6 +51,12 @@ def fuzzing():
 def end():
     sys.exit()
     return "End"
+
+@app.route("/x")
+def escape():
+    if write_num == 0:
+        f.writelines("This extension wasn't escaped.")
+    return flask.Response(response="", status=404)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser("python3 server.py extension")
